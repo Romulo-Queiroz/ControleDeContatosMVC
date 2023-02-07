@@ -31,7 +31,9 @@ Update-Database -Context BancoContext
 # Habilidades utilizadas
 
  - ** C# **
- -** Sql Server **
+ 
+ - ** Sql Server **
+ 
  - ** Bootstrap **
 
 
