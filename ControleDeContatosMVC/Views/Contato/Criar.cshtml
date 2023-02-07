@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ContatoModel
+@{
     ViewData["Title"] = "Casdastre contato";
 }
 
@@ -8,18 +9,20 @@
  
 </div>
 
-<form>
-  <div class="form-group">
+<form asp-controller="Contato" asp-action="Criar" method="post">
+
+    <div class="form-group">
     <label for="nome">Nome</label>
-    <input type="text" class="form-control" placeholder="Digite o nome do contato">
-  </div>
+    <input type="text" asp-for="Nome" class="form-control" placeholder="Digite o nome do contato">
+    </div>
+
     <div class="form-group">
         <label for="email">E-mail</label>
-        <input type="email" class="form-control" placeholder="Digite o e-mail do contato">
+        <input type="email" asp-for="Email" class="form-control" placeholder="Digite o e-mail do contato">
     </div>
     <div class="form-group">
         <label for="celular">Celular</label>
-        <input type="email" class="form-control" placeholder="Digite o celular do contato">
+        <input type="text" asp-for="Celular" class="form-control" placeholder="Digite o celular do contato">
     </div>
  
   <button type="submit" class="btn btn-primary btn-block">Criar</button>
