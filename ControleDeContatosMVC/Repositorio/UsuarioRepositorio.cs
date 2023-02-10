@@ -14,6 +14,10 @@ namespace ControleDeContatosMVC.Repositorio
         {
             _bancoContext = bancoContext;
         }
+        public UsuarioModel BuscarporLogin(string login)
+        {
+            return _bancoContext.Usuarios.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
+        }
         public UsuarioModel BuscarPorID(int id)
         {
             return _bancoContext.Usuarios.FirstOrDefault(x => x.Id == id);
@@ -58,5 +62,6 @@ namespace ControleDeContatosMVC.Repositorio
             _bancoContext.SaveChanges();
             return true;
         }
+
     }
 }
