@@ -1,4 +1,5 @@
-﻿using ControleDeContatosMVC.Models;
+﻿using ControleDeContatosMVC.Helper;
+using ControleDeContatosMVC.Models;
 using ControleDeContatosMVC.Repositorio;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,15 +10,31 @@ namespace ControleDeContatosMVC.Controllers
     public class LoginController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
-        public LoginController(IUsuarioRepositorio usuarioRepositorio) 
+        private readonly ISessao _sessao;
+
+        public LoginController(IUsuarioRepositorio usuarioRepositorio,
+                                 ISessao sessao) 
         {
             _usuarioRepositorio = usuarioRepositorio;
+            _sessao = sessao;
         }
 
         public IActionResult Index()
         {
+            //Se usuario estiver logado redirecionar para home
+
+            if(_sessao.BuscarSessaoDoUsuario() != null) return RedirectToAction("Index", "Home");
+
             return View();
         }
+
+        public IActionResult Sair()
+        {
+            _sessao.RemoverSessaoDoUsuario();
+
+            return RedirectToAction("Index", "Login");
+        }
+
         [HttpPost]
         public IActionResult Entrar(LoginModel loginModel)
         {
@@ -31,7 +48,7 @@ namespace ControleDeContatosMVC.Controllers
                     {
                         if (usuario.SenhaValida(loginModel.Senha))
                         {
-
+                            _sessao.CriarSessaoDoUsuario(usuario);
                             return RedirectToAction("Index", "Home");
                         }
 
