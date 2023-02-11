@@ -1,10 +1,12 @@
-﻿using ControleDeContatosMVC.Models;
+﻿using ControleDeContatosMVC.Filters;
+using ControleDeContatosMVC.Models;
 using ControleDeContatosMVC.Repositorio;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace ControleDeContatosMVC.Controllers
 {
+    [PaginaParaUsuarioLogado]
     public class UsuarioController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;

@@ -1,4 +1,5 @@
-﻿using ControleDeContatosMVC.Models;
+﻿using ControleDeContatosMVC.Filters;
+using ControleDeContatosMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ControleDeContatosMVC.Controllers
 {
+    [PaginaParaUsuarioLogado]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
