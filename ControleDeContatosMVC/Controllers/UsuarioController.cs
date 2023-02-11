@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ControleDeContatosMVC.Controllers
 {
-    [PaginaParaUsuarioLogado]
+    [PaginaRestritaSomenteAdmin]
     public class UsuarioController : Controller
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
