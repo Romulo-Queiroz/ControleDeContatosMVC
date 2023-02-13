@@ -37,7 +37,12 @@ Update-Database -Context BancoContext
  - **Bootstrap**
  
  - **ASP.NET**
+ 
+ ## Listagem Técnica:
+ 
+ - **Criptografia [Hash]**
 
+ - **SMTP**
 
 # Autor
 <div align="center">
