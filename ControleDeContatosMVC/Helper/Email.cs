@@ -20,13 +20,13 @@ namespace ControleDeContatosMVC.Helper
             {
                 string host = _configuration.GetValue<string>("SMTP:Host");
                 string nome = _configuration.GetValue<string>("SMTP:Nome");
-                string userName = _configuration.GetValue<string>("SMTP:UserName");
+                string username = _configuration.GetValue<string>("SMTP:UserName");
                 string senha = _configuration.GetValue<string>("SMTP:Senha");
                 int porta = _configuration.GetValue<int>("SMTP:Porta");
 
                 MailMessage mail = new MailMessage()
                 {
-                    From = new MailAddress(userName, nome)
+                    From = new MailAddress(username, nome)
                 };
 
                 mail.To.Add(email);
@@ -37,7 +37,7 @@ namespace ControleDeContatosMVC.Helper
 
                 using (SmtpClient smtp = new SmtpClient(host, porta))
                 {
-                    smtp.Credentials = new NetworkCredential(userName, senha);
+                    smtp.Credentials = new NetworkCredential(username, senha);
                     smtp.EnableSsl= true;
 
                     smtp.Send(mail);
