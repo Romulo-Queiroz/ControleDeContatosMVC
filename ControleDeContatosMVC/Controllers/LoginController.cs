@@ -11,12 +11,15 @@ namespace ControleDeContatosMVC.Controllers
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly ISessao _sessao;
+        private readonly IEmail _email;
 
         public LoginController(IUsuarioRepositorio usuarioRepositorio,
-                                 ISessao sessao) 
+                                 ISessao sessao,
+                                 IEmail email) 
         {
             _usuarioRepositorio = usuarioRepositorio;
             _sessao = sessao;
+            _email = email;
         }
 
         public IActionResult Index()
@@ -25,6 +28,11 @@ namespace ControleDeContatosMVC.Controllers
 
             if(_sessao.BuscarSessaoDoUsuario() != null) return RedirectToAction("Index", "Home");
 
+            return View();
+        }
+
+        public IActionResult RedefinirSenha()
+        {
             return View();
         }
 
@@ -63,6 +71,47 @@ namespace ControleDeContatosMVC.Controllers
             catch (Exception erro)
             {
                 TempData["MensagemErro"] = $"Ops, não conseguimos realiar seu login, mais detalhes do erro {erro.Message}";
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult EnviarLinkParaRedefinirSenha(RedefinirSenhaModel redefinirSenhaModel)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    UsuarioModel usuario = _usuarioRepositorio.BuscarPorEmailELogin(redefinirSenhaModel.Email, redefinirSenhaModel.Login);
+
+                    if (usuario != null)
+                    {
+                        string novaSenha = usuario.GerarNovaSenha();
+                        string mensagem = $"Sua nova senha é : {novaSenha}";
+
+                       bool emailEnviado = _email.Enviar(usuario.Email, "Sistema de Contatos- Nova Senha", mensagem);
+
+                        if (emailEnviado) 
+                        {
+                            _usuarioRepositorio.Atualizar(usuario);
+                            TempData["MensagemSucesso"] = $"Enviamos para seu email cadastrado uma nova senha";
+                        }
+                        else
+                        {
+                            TempData["MensagemErro"] = $"Não conseguimos enviar o e-mail. Por favor tente novamente. ";
+                        }
+
+                        return RedirectToAction("Index", "Login");
+                    }
+                    TempData["MensagemErro"] = $"Não conseguimos redefinir sua senha. Por favor, verifique os dados informados.";
+
+                }
+
+                return View("Index");
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Ops, não conseguimos redefinir sua senha, mais detalhes do erro {erro.Message}";
                 return RedirectToAction("Index");
             }
         }
