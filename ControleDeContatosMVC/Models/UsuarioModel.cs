@@ -39,6 +39,10 @@ namespace ControleDeContatosMVC.Models
         {
             Senha = Senha.GerarHash();
         }
+        public void setNovaSenha(string novaSenha)
+        {
+            Senha = novaSenha.GerarHash();
+        }
         public string GerarNovaSenha()
         {
             string novaSenha = Guid.NewGuid().ToString().Substring(0, 8);
