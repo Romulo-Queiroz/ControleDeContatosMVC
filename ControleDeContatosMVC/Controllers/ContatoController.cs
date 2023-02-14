@@ -4,6 +4,7 @@ using ControleDeContatosMVC.Repositorio;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using System.Collections.Generic;
+using ControleDeContatosMVC.Helper;
 
 namespace ControleDeContatosMVC.Controllers
 {
@@ -11,13 +12,16 @@ namespace ControleDeContatosMVC.Controllers
     public class ContatoController : Controller
     {
         private readonly IContatoRepositorio _contatoRepositorio;
-        public ContatoController(IContatoRepositorio contatoRepositorio)
+        private readonly ISessao _sessao;
+        public ContatoController(IContatoRepositorio contatoRepositorio, ISessao sessao)
         {
             _contatoRepositorio = contatoRepositorio;
+            _sessao = sessao;
         }
         public IActionResult Index()
         {
-            List<ContatoModel> contatos = _contatoRepositorio.BuscarTodos();
+           UsuarioModel usuarioLogado =  _sessao.BuscarSessaoDoUsuario();
+            List<ContatoModel> contatos = _contatoRepositorio.BuscarTodos(usuarioLogado.Id);
 
             return View(contatos);
         }
@@ -65,7 +69,11 @@ namespace ControleDeContatosMVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    UsuarioModel usuarioLogado = _sessao.BuscarSessaoDoUsuario();
+                    contato.usuarioId = usuarioLogado.Id;
                     _contatoRepositorio.Adicionar(contato);
+
+
                     TempData["MensagemSucesso"] = "Contato cadastrado com sucesso";
                     return RedirectToAction("Index");
                 }
@@ -84,6 +92,9 @@ namespace ControleDeContatosMVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    UsuarioModel usuarioLogado = _sessao.BuscarSessaoDoUsuario();
+                    contato.usuarioId = usuarioLogado.Id;
+
                     _contatoRepositorio.Atualizar(contato);
                     TempData["MensagemSucesso"] = "Contato alterado com sucesso";
                     return RedirectToAction("Index");
